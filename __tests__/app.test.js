@@ -4,17 +4,26 @@ const request = require('supertest');
 const app = require('../lib/app');
 const UserService = require('../lib/services/UserService');
 
+const fakeUser = {
+  firstName: 'Test',
+  lastName: 'User',
+  email: 'super@email.com',
+  password: '12345',
+};
+
+const registerAndLogin = async (userProps = {}) => {
+  const password = userProps.password ?? fakeUser.password;
+  const agent = request.agent(app);
+  const user = await UserService.create({ ...fakeUser, ...userProps });
+  const { email } = user;
+  await agent.post('/api/v1/users/sessions').send({ email, password });
+  return [agent, user];
+};
+
 describe('backend-express-template routes', () => {
   beforeEach(() => {
     return setup(pool);
   });
-
-  const fakeUser = {
-    firstName: 'Test',
-    lastName: 'User',
-    email: 'super@email.com',
-    password: '12345',
-  };
 
   it.skip('POST api/v1/users creates a new user', async () => {
     const resp = await request(app).post('/api/v1/users').send(fakeUser);
@@ -36,7 +45,20 @@ describe('backend-express-template routes', () => {
     expect(resp.status).toBe(200);
   });
 
-  it('DELETE /api/v1/users/sessions deletes the user session', async () => {
+  it('GET api/v1/secrets should return a list of secrets if signed in', async () => {
+    const [agent] = await registerAndLogin();
+    const resp = await agent.get('/api/v1/secrets');
+
+    expect(resp.status).toBe(200);
+    expect(resp.body).toEqual({
+      id: expect.any(String),
+      title: expect.any(String),
+      description: expect.any(String),
+      created_at: expect.any(String),
+    });
+  });
+
+  it.skip('DELETE /api/v1/users/sessions deletes the user session', async () => {
     const agent = request.agent(app);
     const user = await UserService.create({ ...fakeUser });
 
