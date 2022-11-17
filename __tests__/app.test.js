@@ -25,7 +25,7 @@ describe('backend-express-template routes', () => {
     return setup(pool);
   });
 
-  it.skip('POST api/v1/users creates a new user', async () => {
+  it('POST api/v1/users creates a new user', async () => {
     const resp = await request(app).post('/api/v1/users').send(fakeUser);
     expect(resp.status).toBe(200);
     const { firstName, lastName, email } = fakeUser;
@@ -37,7 +37,7 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it.skip('POST /api/v1/users/sessions signs in an existing user', async () => {
+  it('POST /api/v1/users/sessions signs in an existing user', async () => {
     await request(app).post('/api/v1/users').send(fakeUser);
     const resp = await request(app)
       .post('/api/v1/users/sessions')
@@ -58,7 +58,7 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it.skip('DELETE /api/v1/users/sessions deletes the user session', async () => {
+  it('DELETE /api/v1/users/sessions deletes the user session', async () => {
     const agent = request.agent(app);
     const user = await UserService.create({ ...fakeUser });
 
