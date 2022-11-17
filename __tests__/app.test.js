@@ -40,9 +40,7 @@ describe('backend-express-template routes', () => {
     const agent = request.agent(app);
     const user = await UserService.create({ ...fakeUser });
 
-    await agent
-      .post('/api/v1/users/sessions')
-      .send({ email: 'super@email.com', password: '12345' });
+    await agent.post('/api/v1/users/sessions').send(user);
     const resp = await agent.delete('/api/v1/users/sessions');
     expect(resp.status).toBe(204);
   });
