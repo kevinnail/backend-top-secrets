@@ -7,7 +7,7 @@ const UserService = require('../lib/services/UserService');
 const fakeUser = {
   firstName: 'Test',
   lastName: 'User',
-  email: 'super@email.com',
+  email: 'super@defense.gov',
   password: '12345',
 };
 
@@ -25,7 +25,7 @@ describe('backend-express-template routes', () => {
     return setup(pool);
   });
 
-  it.skip('POST api/v1/users creates a new user', async () => {
+  it('POST api/v1/users creates a new user', async () => {
     const resp = await request(app).post('/api/v1/users').send(fakeUser);
     expect(resp.status).toBe(200);
     const { firstName, lastName, email } = fakeUser;
@@ -37,11 +37,11 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it.skip('POST /api/v1/users/sessions signs in an existing user', async () => {
+  it('POST /api/v1/users/sessions signs in an existing user', async () => {
     await request(app).post('/api/v1/users').send(fakeUser);
     const resp = await request(app)
       .post('/api/v1/users/sessions')
-      .send({ email: 'super@email.com', password: '12345' });
+      .send({ email: 'super@defense.gov', password: '12345' });
     expect(resp.status).toBe(200);
   });
 
@@ -60,7 +60,7 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it.skip('POST api/v1/secrets should create a new secret', async () => {
+  it('POST api/v1/secrets should create a new secret', async () => {
     const secret = {
       title: 'Secret to success',
       description: 'Join the Church of the Latter Day Dude',
@@ -76,7 +76,7 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it.skip('DELETE /api/v1/users/sessions deletes the user session', async () => {
+  it('DELETE /api/v1/users/sessions deletes the user session', async () => {
     const agent = request.agent(app);
     const user = await UserService.create({ ...fakeUser });
 
