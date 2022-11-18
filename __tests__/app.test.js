@@ -25,7 +25,7 @@ describe('backend-express-template routes', () => {
     return setup(pool);
   });
 
-  it('POST api/v1/users creates a new user', async () => {
+  it.skip('POST api/v1/users creates a new user', async () => {
     const resp = await request(app).post('/api/v1/users').send(fakeUser);
     expect(resp.status).toBe(200);
     const { firstName, lastName, email } = fakeUser;
@@ -37,7 +37,7 @@ describe('backend-express-template routes', () => {
     });
   });
 
-  it('POST /api/v1/users/sessions signs in an existing user', async () => {
+  it.skip('POST /api/v1/users/sessions signs in an existing user', async () => {
     await request(app).post('/api/v1/users').send(fakeUser);
     const resp = await request(app)
       .post('/api/v1/users/sessions')
@@ -47,18 +47,36 @@ describe('backend-express-template routes', () => {
 
   it('GET api/v1/secrets should return a list of secrets if signed in', async () => {
     const [agent] = await registerAndLogin();
+
     const resp = await agent.get('/api/v1/secrets');
 
     expect(resp.status).toBe(200);
+    expect(resp.body[0]).toEqual({
+      created_at: expect.any(String),
+      description:
+        'You just have think the right thoughts and you will be super and hooray. ',
+      id: '1',
+      title: 'Superior health',
+    });
+  });
+
+  it.skip('POST api/v1/secrets should create a new secret', async () => {
+    const secret = {
+      title: 'Secret to success',
+      description: 'Join the Church of the Latter Day Dude',
+    };
+    const [agent] = await registerAndLogin();
+    const resp = await agent.post('/api/v1/secrets').send(secret);
+    expect(resp.status).toBe(200);
     expect(resp.body).toEqual({
       id: expect.any(String),
-      title: expect.any(String),
-      description: expect.any(String),
+      title: 'Secret to success',
+      description: 'Join the Church of the Latter Day Dude',
       created_at: expect.any(String),
     });
   });
 
-  it('DELETE /api/v1/users/sessions deletes the user session', async () => {
+  it.skip('DELETE /api/v1/users/sessions deletes the user session', async () => {
     const agent = request.agent(app);
     const user = await UserService.create({ ...fakeUser });
 
