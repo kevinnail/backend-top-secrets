@@ -47,7 +47,6 @@ describe('backend-express-template routes', () => {
 
   it('GET api/v1/secrets should return a list of secrets if signed in', async () => {
     const [agent] = await registerAndLogin();
-
     const resp = await agent.get('/api/v1/secrets');
 
     expect(resp.status).toBe(200);
